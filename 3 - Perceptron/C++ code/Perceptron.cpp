@@ -68,7 +68,7 @@ double cross_entropy_cost_function(const std::vector<double>& a, const std::vect
         l += y[i] * log(a[i]) + (1 - y[i]) * log(1 - a[i]);
     }
 
-    return -1.0/ nb_samples * l;
+    return -1.0 / nb_samples * l;
 }
 
 hyper_parameters gradients(const std::vector<double>& a, const std::vector<double>& y, const matrix& X)
@@ -141,13 +141,11 @@ double accuracy_score(const std::vector<double>& y, const std::vector<double>& y
             res += 1;
         }
     }
-    return res / nb_samples*100;
+    return res / nb_samples * 100;
 }
 
 neural_network_outputs artificial_neuron_perceptron_for_loop(const matrix& X, const std::vector<double>& y, double alpha, int n_iter)
 {
-    auto nb_samples{ X.size() };
-    auto nb_features{ X[0].size() };
     std::vector<double> l(n_iter);
     auto W_b{ initialize(X) };
 
@@ -203,7 +201,7 @@ int main()
     x_to_predict[0] = sample_to_predict_1;
     x_to_predict[1] = sample_to_predict_2;
     auto sample_pred{ predict(x_to_predict, std::get<0>(out)) };
-    std::cout << "Prediction for the first added sample is " << sample_pred[0] <<  std::endl;
+    std::cout << "Prediction for the first added sample is " << sample_pred[0] << std::endl;
     std::cout << "Prediction for the second added sample is " << sample_pred[1] << std::endl;
 
     //Use case #2 without linear separability
@@ -280,5 +278,3 @@ int main()
     std::cout << "Prediction for the first added sample is " << sample_pred_3[0] << std::endl;
     std::cout << "Prediction for the second added sample is " << sample_pred_3[1] << std::endl;
 }
-
-
