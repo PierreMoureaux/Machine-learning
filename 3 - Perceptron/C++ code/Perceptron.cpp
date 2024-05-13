@@ -42,7 +42,7 @@ std::vector<double> model(const matrix& X, const hyper_parameters& W_b)
         z[i] = 0;
         for (auto j = 0; j < nb_features; ++j)
         {
-            z[i] += std::get<0>(W_b)[j] * X[i][j] + std::get<1>(W_b)[j];
+            z[i] += std::get<0>(W_b)[j] * X[i][j] + std::get<1>(W_b)[i];
         }
     }
 
@@ -168,23 +168,15 @@ neural_network_outputs artificial_neuron_perceptron_for_loop(const matrix& X, co
 int main()
 {
     //Use case #1 with linear separability
-    std::vector<double> sample_1{ 1.0,1.0 };
-    std::vector<double> sample_2{ 1.1,1.2 };
-    std::vector<double> sample_3{ 1.2,1.3 };
-    std::vector<double> sample_4{ 1.4,1.4 };
-    std::vector<double> sample_5{ 10.0,10.0 };
-    std::vector<double> sample_6{ 10.1,10.2 };
-    std::vector<double> sample_7{ 10.2,10.3 };
-    std::vector<double> sample_8{ 10.4,10.4 };
     matrix x(8);
-    x[0] = sample_1;
-    x[1] = sample_2;
-    x[2] = sample_3;
-    x[3] = sample_4;
-    x[4] = sample_5;
-    x[5] = sample_6;
-    x[6] = sample_7;
-    x[7] = sample_8;
+    x[0] = { 1.0,1.0 }
+    x[1] = { 1.1,1.2 };
+    x[2] = { 1.2,1.3 };
+    x[3] = { 1.4,1.4 };
+    x[4] = { 10.0,10.0 };
+    x[5] = { 10.1,10.2 };
+    x[6] = { 10.2,10.3 };
+    x[7] = { 10.4,10.4 };
 
     std::vector<double> y{ 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0 };
 
@@ -195,33 +187,23 @@ int main()
         std::cout << std::get<1>(out)[k] << std::endl;
     }
 
-    std::vector<double> sample_to_predict_1{ 1.0,2.0 };
-    std::vector<double> sample_to_predict_2{ 9.0,9.0 };
     matrix x_to_predict(2);
-    x_to_predict[0] = sample_to_predict_1;
-    x_to_predict[1] = sample_to_predict_2;
+    x_to_predict[0] = { 1.0,2.0 };
+    x_to_predict[1] = { 9.0,9.0 };
     auto sample_pred{ predict(x_to_predict, std::get<0>(out)) };
     std::cout << "Prediction for the first added sample is " << sample_pred[0] << std::endl;
     std::cout << "Prediction for the second added sample is " << sample_pred[1] << std::endl;
 
     //Use case #2 without linear separability
-    std::vector<double> sample_1_2{ 1.0,1.0 };
-    std::vector<double> sample_2_2{ 1.1,1.2 };
-    std::vector<double> sample_3_2{ 1.2,1.3 };
-    std::vector<double> sample_4_2{ 1.4,1.4 };
-    std::vector<double> sample_5_2{ 10.0,10.0 };
-    std::vector<double> sample_6_2{ 10.1,10.2 };
-    std::vector<double> sample_7_2{ 10.2,10.3 };
-    std::vector<double> sample_8_2{ 10.4,10.4 };
     matrix x_2(8);
-    x_2[0] = sample_1_2;
-    x_2[1] = sample_2_2;
-    x_2[2] = sample_3_2;
-    x_2[3] = sample_4_2;
-    x_2[4] = sample_5_2;
-    x_2[5] = sample_6_2;
-    x_2[6] = sample_7_2;
-    x_2[7] = sample_8_2;
+    x_2[0] = { 1.0,1.0 }
+    x_2[1] = { 1.1,1.2 };
+    x_2[2] = { 1.2,1.3 };
+    x_2[3] = { 1.4,1.4 };
+    x_2[4] = { 10.0,10.0 };
+    x_2[5] = { 10.1,10.2 };
+    x_2[6] = { 10.2,10.3 };
+    x_2[7] = { 10.4,10.4 };
 
     std::vector<double> y_2{ 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0 };
 
@@ -232,33 +214,23 @@ int main()
         std::cout << std::get<1>(out_2)[k] << std::endl;
     }
 
-    std::vector<double> sample_to_predict_1_2{ 1.0,2.0 };
-    std::vector<double> sample_to_predict_2_2{ 9.0,9.0 };
     matrix x_to_predict_2(2);
-    x_to_predict_2[0] = sample_to_predict_1_2;
-    x_to_predict_2[1] = sample_to_predict_2_2;
+    x_to_predict_2[0] = { 1.0,2.0 };
+    x_to_predict_2[1] = { 9.0,9.0 };
     auto sample_pred_2{ predict(x_to_predict_2, std::get<0>(out_2)) };
     std::cout << "Prediction for the first added sample is " << sample_pred_2[0] << std::endl;
     std::cout << "Prediction for the second added sample is " << sample_pred_2[1] << std::endl;
 
     //Use case #3 with almost linear separability
-    std::vector<double> sample_1_3{ 1.0,1.0 };
-    std::vector<double> sample_2_3{ 1.1,1.2 };
-    std::vector<double> sample_3_3{ 1.2,1.3 };
-    std::vector<double> sample_4_3{ 1.4,1.4 };
-    std::vector<double> sample_5_3{ 10.0,10.0 };
-    std::vector<double> sample_6_3{ 10.1,10.2 };
-    std::vector<double> sample_7_3{ 10.2,10.3 };
-    std::vector<double> sample_8_3{ 10.4,10.4 };
     matrix x_3(8);
-    x_3[0] = sample_1_3;
-    x_3[1] = sample_2_3;
-    x_3[2] = sample_3_3;
-    x_3[3] = sample_4_3;
-    x_3[4] = sample_5_3;
-    x_3[5] = sample_6_3;
-    x_3[6] = sample_7_3;
-    x_3[7] = sample_8_3;
+    x_3[0] = { 1.0,1.0 }
+    x_3[1] = { 1.1,1.2 };
+    x_3[2] = { 1.2,1.3 };
+    x_3[3] = { 1.4,1.4 };
+    x_3[4] = { 10.0,10.0 };
+    x_3[5] = { 10.1,10.2 };
+    x_3[6] = { 10.2,10.3 };
+    x_3[7] = { 10.4,10.4 };
 
     std::vector<double> y_3{ 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0 };
 
@@ -269,11 +241,9 @@ int main()
         std::cout << std::get<1>(out_3)[k] << std::endl;
     }
 
-    std::vector<double> sample_to_predict_1_3{ 1.0,2.0 };
-    std::vector<double> sample_to_predict_2_3{ 9.0,9.0 };
     matrix x_to_predict_3(2);
-    x_to_predict_3[0] = sample_to_predict_1_3;
-    x_to_predict_3[1] = sample_to_predict_2_3;
+    x_to_predict_3[0] = { 1.0,2.0 };
+    x_to_predict_3[1] = { 9.0,9.0 };
     auto sample_pred_3{ predict(x_to_predict_3, std::get<0>(out_3)) };
     std::cout << "Prediction for the first added sample is " << sample_pred_3[0] << std::endl;
     std::cout << "Prediction for the second added sample is " << sample_pred_3[1] << std::endl;
