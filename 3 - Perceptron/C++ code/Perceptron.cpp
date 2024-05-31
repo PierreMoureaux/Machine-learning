@@ -169,7 +169,7 @@ int main()
 {
     //Use case #1 with linear separability
     matrix x(8);
-    x[0] = { 1.0,1.0 }
+    x[0] = { 1.0,1.0 };
     x[1] = { 1.1,1.2 };
     x[2] = { 1.2,1.3 };
     x[3] = { 1.4,1.4 };
@@ -196,7 +196,7 @@ int main()
 
     //Use case #2 without linear separability
     matrix x_2(8);
-    x_2[0] = { 1.0,1.0 }
+    x_2[0] = { 1.0,1.0 };
     x_2[1] = { 1.1,1.2 };
     x_2[2] = { 1.2,1.3 };
     x_2[3] = { 1.4,1.4 };
@@ -223,7 +223,7 @@ int main()
 
     //Use case #3 with almost linear separability
     matrix x_3(8);
-    x_3[0] = { 1.0,1.0 }
+    x_3[0] = { 1.0,1.0 };
     x_3[1] = { 1.1,1.2 };
     x_3[2] = { 1.2,1.3 };
     x_3[3] = { 1.4,1.4 };
