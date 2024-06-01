@@ -59,7 +59,7 @@ std::vector<double> model(const matrix& X, const hyper_parameters& W_b)
 
 double cross_entropy_cost_function(const std::vector<double>& a, const std::vector<double>& y)
 {
-    auto l{ 0.0 };
+    double l{ 0.0 };
     auto nb_samples{ a.size() };
 
     //l = -1/m * sum_{i = [1,m]}(y_i * log(a_i) + (1 - y_i) * log(1 - a_i))
@@ -76,7 +76,7 @@ hyper_parameters gradients(const std::vector<double>& a, const std::vector<doubl
     auto nb_samples{ X.size() };
     auto nb_features{ X[0].size() };
     std::vector<double> dW(nb_features, 0.0);
-    auto db_scalar{ 0.0 };
+    double db_scalar{ 0.0 };
 
     //dW(j) = 1/m * sum_{i = [1,m]}(a_i - y_i)*X[j]
     //db = 1/m * sum_{i = [1,m]}(a_i - y_i)
@@ -133,7 +133,7 @@ std::vector<double> predict(const matrix& X, const hyper_parameters& W_b)
 double accuracy_score(const std::vector<double>& y, const std::vector<double>& y_pred)
 {
     auto nb_samples{ y.size() };
-    auto res{ 0.0 };
+    double res{ 0.0 };
     for (auto i = 0; i < nb_samples; ++i)
     {
         if (y[i] == y_pred[i])
@@ -163,7 +163,58 @@ neural_network_outputs artificial_neuron_perceptron_for_loop(const matrix& X, co
     return std::make_tuple(W_b, l);
 }
 
+//Assuming that a and b have the same lenght
+std::vector<double> diff_abs_vectors(const std::vector<double>& a, const std::vector<double>& b)
+{
+    std::vector<double> res;
+    auto s{ a.size() };
+    for (auto i = 0; i != s; ++i)
+    {
+        res.emplace_back(abs(a[i] - b[i]));
+    }
+    return res;
+}
+
+bool compare_epsilon(const std::vector<double>& a, double eps)
+{
+    bool res{ true };
+    for (auto i : a)
+    {
+        if (i > eps)
+        {
+            res = false;
+            break;
+        }
+    }
+    return res;
+}
+
 //TO DO : artificial_neuron_perceptron_while_loop, in order to embedd dynamic error check during the loop
+neural_network_outputs artificial_neuron_perceptron_while_loop(const matrix& X, const std::vector<double>& y, double alpha, double eps)
+{
+    std::vector<double> l;
+    auto W_b{ initialize(X) };
+    bool check{ false };
+    int iter_limit{ 100000 };
+    int iter{ 0 };
+    do
+    {
+        auto a{ model(X, W_b) };
+        l.emplace_back(cross_entropy_cost_function(a, y));
+        auto dW_db{ gradients(a, y, X) };
+        auto W_b_iter{ W_b };
+        update(dW_db, W_b, alpha);
+        auto diffW{ diff_abs_vectors(std::get<0>(W_b), std::get<0>(W_b_iter)) };
+        auto diffb{ diff_abs_vectors(std::get<1>(W_b), std::get<1>(W_b_iter)) };
+        check = compare_epsilon(diffW, eps) && compare_epsilon(diffb, eps);
+        iter++;
+    } while (!check && (iter < iter_limits));
+
+    auto y_pred{ predict(X, W_b) };
+    std::cout << "The accuracy score is " << accuracy_score(y, y_pred) << "%" << std::endl;
+
+    return std::make_tuple(W_b, l);
+}
 
 int main()
 {
@@ -180,11 +231,22 @@ int main()
 
     std::vector<double> y{ 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0 };
 
+    /*
+    //Test with for loop gradient descent
     auto out{ artificial_neuron_perceptron_for_loop(x, y, 0.1, 100) };
     std::cout << "Linear separability error tracking" << std::endl;
     for (auto k = 0; k != 100; ++k)
     {
         std::cout << std::get<1>(out)[k] << std::endl;
+    }*/
+
+    //Test with while loop gradient descent
+    auto out{ artificial_neuron_perceptron_while_loop(x, y, 0.1, 0.001) };
+    std::cout << "Linear separability error tracking" << std::endl;
+    auto error_track{ std::get<1>(out) };
+    for (auto k : error_track)
+    {
+        std::cout << k << std::endl;
     }
 
     matrix x_to_predict(2);
@@ -248,3 +310,4 @@ int main()
     std::cout << "Prediction for the first added sample is " << sample_pred_3[0] << std::endl;
     std::cout << "Prediction for the second added sample is " << sample_pred_3[1] << std::endl;
 }
+
