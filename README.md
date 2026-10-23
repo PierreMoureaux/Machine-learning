@@ -1,3 +1,3 @@
 # Machine-learning
 
-This repository aims to highlight several machine learning results, with a specific focus on C++ code (in addition of classical sklearn, Keras python code)
+This repository aims to highlight several machine learning results, especially Physical-informed neural network topics
